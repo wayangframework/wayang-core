@@ -1,6 +1,7 @@
 package id.web.gosoft.wayangframework;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -22,26 +23,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Unit test for simple App.
  */
+@Slf4j
 public class BaseTest {
     public ChromeDriver chromeDriver;
     public ChromeOptions options = new ChromeOptions();
 
     @BeforeEach
     public void seleniumTest() {
+        log.info("Starting Selenium Test......");
         setupLocalDriver();
         chromeDriver = new ChromeDriver(options);
     }
     private void setupLocalDriver(){
+        log.info("Setup Local Driver....");
         options.addArguments("--no-sandbox");
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--disable-dev-shm-usage");
         if(Optional.ofNullable(System.getenv("CHROME_MODE")).orElse("").equalsIgnoreCase("headless")){
             options.addArguments("--headless");
             System.out.println("Running With headless mode");
-            WebDriverManager.chromedriver().setup();
         }else{
             System.out.println("Running Without headless mode");
         }
+        WebDriverManager.chromedriver().setup();
     }
 
     /**
