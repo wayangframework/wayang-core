@@ -1,5 +1,6 @@
 package id.web.gosoft.wayangframework;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -37,6 +38,7 @@ public class BaseTest {
         if(Optional.ofNullable(System.getenv("CHROME_MODE")).orElse("").equalsIgnoreCase("headless")){
             options.addArguments("--headless");
             System.out.println("Running With headless mode");
+            WebDriverManager.chromedriver().setup();
         }else{
             System.out.println("Running Without headless mode");
         }
