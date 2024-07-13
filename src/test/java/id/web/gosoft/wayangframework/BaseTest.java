@@ -7,10 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,11 +22,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Unit test for simple App.
  */
 public class BaseTest {
-    ChromeDriver chromeDriver;
+    public ChromeDriver chromeDriver;
+    public ChromeOptions options = new ChromeOptions();
 
     @BeforeEach
     public void seleniumTest() {
-        chromeDriver = new ChromeDriver();
+        setupLocalDriver();
+        chromeDriver = new ChromeDriver(options);
+    }
+    private void setupLocalDriver(){
+        options.addArguments("--no-sandbox");
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable-dev-shm-usage");
+        if(Optional.ofNullable(System.getenv("CHROME_MODE")).orElse("").equalsIgnoreCase("headless")){
+            options.addArguments("--headless");
+            System.out.println("Running With headless mode");
+        }else{
+            System.out.println("Running Without headless mode");
+        }
     }
 
     /**
